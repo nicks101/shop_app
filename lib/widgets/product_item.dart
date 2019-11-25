@@ -1,20 +1,24 @@
+import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
 
 import '../screens/product_detail_screen.dart';
+import '../providers/product.dart';
 
 class ProductItem extends StatelessWidget {
-  final String id;
-  final String imageUrl;
-  final String title;
+  // final String id;
+  // final String imageUrl;
+  // final String title;
 
-  ProductItem({
-    this.title,
-    this.imageUrl,
-    this.id,
-  });
+  // ProductItem({
+  //   this.title,
+  //   this.imageUrl,
+  //   this.id,
+  // });
 
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Product>(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: GridTile(
@@ -36,11 +40,11 @@ class ProductItem extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pushNamed(
                   ProductDetailScreen.routeName,
-                  arguments: id,
+                  arguments: product.id,
                 );
               },
               child: Image.network(
-                imageUrl,
+                product.imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -48,15 +52,19 @@ class ProductItem extends StatelessWidget {
         ),
         footer: GridTileBar(
           title: Text(
-            title,
+            product.title,
             textAlign: TextAlign.center,
             overflow: TextOverflow.fade,
           ),
           backgroundColor: Colors.black87,
           leading: IconButton(
-            icon: Icon(Icons.favorite),
+            icon: Icon(
+              product.isFavorite ? Icons.favorite : Icons.favorite_border,
+            ),
             color: Theme.of(context).accentColor,
-            onPressed: () {},
+            onPressed: () {
+              product.toggleFavoriteStatus();
+            },
           ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
