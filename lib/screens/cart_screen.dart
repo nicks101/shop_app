@@ -47,7 +47,10 @@ class CartScreen extends StatelessWidget {
                       Provider.of<Orders>(
                         context,
                         listen: false,
-                      ).addOrders(cart.items.values.toList(), cart.totalAmount);
+                      ).addOrders(
+                        cart.items.values.toList(),
+                        cart.totalAmount,
+                      );
                       cart.clear();
                     },
                     textColor: Theme.of(context).primaryColor,
