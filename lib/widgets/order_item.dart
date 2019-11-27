@@ -12,12 +12,13 @@ class OrderItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(20.0),
       child: Column(
         children: <Widget>[
           ListTile(
             title: Text('\$${order.amount}'),
-            subtitle: Text(DateFormat('dd mm yyyy hh:mm').format(order.datetime)),
+            subtitle:
+                Text(DateFormat('dd mm yyyy hh:mm').format(order.datetime)),
             trailing: IconButton(
               icon: Icon(Icons.expand_more),
               onPressed: () {},
