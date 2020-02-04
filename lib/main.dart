@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import './screens/products_overview_screen.dart';
 import './screens/product_detail_screen.dart';
 import './screens/cart_screen.dart';
-import './providers/products.dart';
-import './providers/cart.dart';
-import './providers/orders.dart';
 import './screens/order_screen.dart';
 import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
+import './screens/auth_screen.dart';
+import './providers/products.dart';
+import './providers/cart.dart';
+import './providers/orders.dart';
+import './providers/auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(
           value: Orders(),
         ),
+        ChangeNotifierProvider.value(
+          value: Auth(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -39,8 +44,9 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrangeAccent,
           fontFamily: 'Lato',
         ),
-        home: ProductsOverviewScreen(),
+        home: AuthScreen(),
         routes: {
+          ProductsOverviewScreen.routeName: (ctx) => ProductsOverviewScreen(),
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
           OrderScreen.routeName: (ctx) => OrderScreen(),
