@@ -1,8 +1,7 @@
-import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:shop_app/widgets/order_item.dart';
-import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import './cart.dart';
 
