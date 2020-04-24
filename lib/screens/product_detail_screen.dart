@@ -15,15 +15,17 @@ class ProductDetailScreen extends StatelessWidget {
     ).findById(productId);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_loadedProduct.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Hero(
+      // appBar: AppBar(
+      //   title: Text(_loadedProduct.title),
+      // ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(_loadedProduct.title),
+              background: Hero(
                 tag: _loadedProduct.id,
                 child: Image.network(
                   _loadedProduct.imageUrl,
@@ -31,36 +33,45 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 15),
-            Text(
-              'Product Name : ${_loadedProduct.title}',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(height: 15),
-            Text(
-              'Product Price : ${_loadedProduct.price}',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(height: 15),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                '${_loadedProduct.description}',
-                textAlign: TextAlign.center,
-                softWrap: true,
-                style: TextStyle(
-                  fontSize: 18,
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                SizedBox(height: 15),
+                Text(
+                  'Product Name : ${_loadedProduct.title}',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
+                SizedBox(height: 15),
+                Text(
+                  'Product Price : ${_loadedProduct.price}',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    '${_loadedProduct.description}',
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 800),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
