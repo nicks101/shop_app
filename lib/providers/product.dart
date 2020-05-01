@@ -34,10 +34,12 @@ class Product with ChangeNotifier {
         'https://flutter-shop-app-60a6a.firebaseio.com/userFavorites/$userId/$id.json?auth=$token';
 
     try {
-      final response = await http.patch(url,
-          body: json.encode({
-            'isFavorite': isFavorite,
-          }));
+      final response = await http.put(
+        url,
+        body: json.encode(
+          isFavorite,
+        ),
+      );
 
       if (response.statusCode >= 400) {
         _setFavorite(oldStatus);
