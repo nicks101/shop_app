@@ -19,62 +19,66 @@ class _OrderItemState extends State<OrderItem> {
   bool _expanded = false;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(20.0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text(
-              '\$${widget.order.amount}',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height: _expanded ? min(widget.order.products.length * 20.0 + 200.0, 250.0) : 125,
+          child: Card(
+        margin: const EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(
+                '\$${widget.order.amount}',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              subtitle: Text(
+                  DateFormat('dd/MM/yyyy hh:mm').format(widget.order.datetime)),
+              trailing: IconButton(
+                icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+                onPressed: () {
+                  setState(() {
+                    _expanded = !_expanded;
+                  });
+                },
               ),
             ),
-            subtitle: Text(
-                DateFormat('dd/MM/yyyy hh:mm').format(widget.order.datetime)),
-            trailing: IconButton(
-              icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
-              onPressed: () {
-                setState(() {
-                  _expanded = !_expanded;
-                });
-              },
-            ),
-          ),
-          if (_expanded)
-            Container(
-              padding: const EdgeInsets.all(16),
-              height: min(widget.order.products.length * 20.0 + 60.0, 180.0),
-              child: ListView(
-                children: widget.order.products
-                    .map(
-                      (product) => Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Text(
-                              product.title,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+              AnimatedContainer(
+                duration : Duration(milliseconds: 300),
+                padding: const EdgeInsets.all(8),
+                height: _expanded ? min(widget.order.products.length * 20.0 + 60.0, 120.0) : 0,
+                child: ListView(
+                  children: widget.order.products
+                      .map(
+                        (product) => Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Text(
+                                product.title,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Spacer(),
-                            Text(
-                              '\$${product.price} x${product.quantity}',
-                              style: TextStyle(
-                                fontSize: 15,
+                              Spacer(),
+                              Text(
+                                '\$${product.price} x${product.quantity}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
+                      )
+                      .toList(),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
