@@ -143,7 +143,7 @@ class Products with ChangeNotifier {
       _items[prodIndex] = newProduct;
       notifyListeners();
     } else {
-      print('...');
+      print('problem');
     }
   }
 
