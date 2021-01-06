@@ -1,16 +1,28 @@
-# shop_app
+# Shopping app template
 
-A new Flutter project.
+A mobile application made in flutter. 
+  
+Simple and sleek UI for a e-commerce mobile application. Can be extended to a web application using flutter web with same code base.  
+  
+  
+ ## Technologies Used
+   
+ * Firebase authentication
+ * Firebase realtime database
+ 
+ ## Features
+ 
+ * SignUp/Login using email and Logout
+ * view, add and edit products.
+ * add/remove products to cart.
+ * view previous orders.
+   
+   
+## Things I learned
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Processing user input using forms (textfields)
+* Integrating APIs (how to request and handle response)
+* Handle error 
+* File architecture (maintaining souce code for scaling)
+* Importance and need of refactoring
+* State management in flutter (and as a general concept)
