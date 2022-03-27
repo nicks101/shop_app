@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import './product.dart';
-import '../models/http_exception.dart';
+import 'package:shop_app/models/http_exception.dart';
+import 'package:shop_app/providers/product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -73,20 +72,25 @@ class Products with ChangeNotifier {
     url =
         'https://flutter-shop-app-60a6a.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
     final favouriteResponse = await http.get(Uri.parse(url));
-    final favouriteData = json.decode(favouriteResponse.body);
+    final favouriteData =
+        json.decode(favouriteResponse.body) as Map<String, dynamic>?;
 
     final List<Product> _loadedProduct = [];
 
-    extractedData.forEach((prodId, prodData) {
-      _loadedProduct.add(Product(
-        id: prodId,
-        price: prodData['price'],
-        description: prodData['description'],
-        imageUrl: prodData['imageUrl'],
-        title: prodData['title'],
-        isFavorite:
-            favouriteData == null ? false : favouriteData[prodId] ?? false,
-      ));
+    extractedData.forEach((String prodId, data) {
+      final prodData = data as Map<String, dynamic>;
+      _loadedProduct.add(
+        Product(
+          id: prodId,
+          price: prodData['price'] as double,
+          description: prodData['description'] as String,
+          imageUrl: prodData['imageUrl'] as String,
+          title: prodData['title'] as String,
+          isFavorite: favouriteData != null &&
+              favouriteData[prodId] != null &&
+              favouriteData[prodId] as bool,
+        ),
+      );
     });
     _items = _loadedProduct;
     notifyListeners();
@@ -95,31 +99,27 @@ class Products with ChangeNotifier {
   Future<void> addProducts(Product product) async {
     final url =
         'https://flutter-shop-app-60a6a.firebaseio.com/products.json?auth=$authToken';
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        body: json.encode({
-          'title': product.title,
-          'price': product.price,
-          'description': product.description,
-          'imageUrl': product.imageUrl,
-          'creatorId': userId,
-        }),
-      );
 
-      final _newProduct = Product(
-        id: json.decode(response.body)['name'],
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-      );
-      _items.add(_newProduct);
-      notifyListeners();
-    } catch (error) {
-      print(error);
-      throw error;
-    }
+    final response = await http.post(
+      Uri.parse(url),
+      body: json.encode({
+        'title': product.title,
+        'price': product.price,
+        'description': product.description,
+        'imageUrl': product.imageUrl,
+        'creatorId': userId,
+      }),
+    );
+
+    final _newProduct = Product(
+      id: json.decode(response.body)['name'] as String,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    );
+    _items.add(_newProduct);
+    notifyListeners();
   }
 
   Future<void> updateProducts(String id, Product newProduct) async {
@@ -129,18 +129,20 @@ class Products with ChangeNotifier {
       final url =
           'https://flutter-shop-app-60a6a.firebaseio.com/products/$id.json?auth=$authToken';
 
-      await http.patch(Uri.parse(url),
-          body: json.encode({
-            'title': newProduct.title,
-            'price': newProduct.price,
-            'description': newProduct.description,
-            'imageUrl': newProduct.imageUrl,
-          }));
+      await http.patch(
+        Uri.parse(url),
+        body: json.encode({
+          'title': newProduct.title,
+          'price': newProduct.price,
+          'description': newProduct.description,
+          'imageUrl': newProduct.imageUrl,
+        }),
+      );
 
       _items[prodIndex] = newProduct;
       notifyListeners();
     } else {
-      print('problem');
+      // print('problem');
     }
   }
 

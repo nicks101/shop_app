@@ -4,8 +4,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/http_exception.dart';
+import 'package:shop_app/models/http_exception.dart';
 
 class Auth with ChangeNotifier {
   String? _token;
@@ -31,48 +30,50 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> _authenticate(
-      String email, String password, String urlSegment) async {
+    String email,
+    String password,
+    String urlSegment,
+  ) async {
     final url =
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyDAT29OLEpPB0dqwch9hzt1SlXIuh25Vew';
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        body: json.encode(
-          {
-            'email': email,
-            'password': password,
-            'returnSecureToken': true,
-          },
-        ),
-      );
-      final responseData = json.decode(response.body);
-      if (responseData['error'] != null) {
-        throw HttpException(responseData['error']['message']);
-      }
-      _token = responseData['idToken'];
-      _userId = responseData['localId'];
-      _expiryDate = DateTime.now().add(
-        Duration(
-          seconds: int.parse(
-            responseData['expiresIn'],
-          ),
-        ),
-      );
-      _autoLogout();
-      notifyListeners();
 
-      final prefs = await SharedPreferences.getInstance();
-      final userData = json.encode(
+    final response = await http.post(
+      Uri.parse(url),
+      body: json.encode(
         {
-          'token': _token,
-          'userId': _userId,
-          'expiryDate': _expiryDate?.toIso8601String(),
+          'email': email,
+          'password': password,
+          'returnSecureToken': true,
         },
+      ),
+    );
+    final responseData = json.decode(response.body) as Map<String, dynamic>;
+    if (responseData['error'] != null) {
+      throw HttpException(
+        (responseData['error'] as Map<String, dynamic>)['message'] as String,
       );
-      prefs.setString('userData', userData);
-    } catch (error) {
-      throw error;
     }
+    _token = responseData['idToken'] as String;
+    _userId = responseData['localId'] as String;
+    _expiryDate = DateTime.now().add(
+      Duration(
+        seconds: int.parse(
+          responseData['expiresIn'] as String,
+        ),
+      ),
+    );
+    _autoLogout();
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    final userData = json.encode(
+      {
+        'token': _token,
+        'userId': _userId,
+        'expiryDate': _expiryDate?.toIso8601String(),
+      },
+    );
+    await prefs.setString('userData', userData);
   }
 
   Future<void> signup(String email, String password) async {
