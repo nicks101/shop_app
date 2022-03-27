@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import './helpers/custom_route.dart';
-import './providers/auth.dart';
-import './providers/cart.dart';
-import './providers/orders.dart';
-import './providers/products.dart';
-import './screens/auth_screen.dart';
-import './screens/cart_screen.dart';
-import './screens/edit_product_screen.dart';
-import './screens/order_screen.dart';
-import './screens/product_detail_screen.dart';
-import './screens/products_overview_screen.dart';
-import './screens/splash_screen.dart';
-import './screens/user_products_screen.dart';
+import 'package:shop_app/helpers/custom_route.dart';
+import 'package:shop_app/providers/auth.dart';
+import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/orders.dart';
+import 'package:shop_app/providers/products.dart';
+import 'package:shop_app/screens/auth_screen.dart';
+import 'package:shop_app/screens/cart_screen.dart';
+import 'package:shop_app/screens/edit_product_screen.dart';
+import 'package:shop_app/screens/order_screen.dart';
+import 'package:shop_app/screens/product_detail_screen.dart';
+import 'package:shop_app/screens/products_overview_screen.dart';
+import 'package:shop_app/screens/splash_screen.dart';
+import 'package:shop_app/screens/user_products_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,8 +27,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<Auth, Products>(
           create: (_) => Products("", "", []),
           update: (ctx, auth, previousProducts) => Products(
-            auth.token!,
-            auth.userId!,
+            auth.token ?? "",
+            auth.userId ?? "",
             previousProducts == null ? [] : previousProducts.items,
           ),
         ),

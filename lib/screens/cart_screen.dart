@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/cart.dart' show Cart;
-import '../providers/orders.dart';
-import '../widgets/cart_item.dart';
+import 'package:shop_app/providers/cart.dart' show Cart;
+import 'package:shop_app/providers/orders.dart';
+import 'package:shop_app/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
@@ -24,13 +23,13 @@ class CartScreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Row(
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Total Amount',
                     style: TextStyle(
                       fontSize: 16,
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Chip(
                     label: Text(
                       '\$${cart.totalAmount.toStringAsFixed(2)}',
@@ -46,7 +45,7 @@ class CartScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10.0,
           ),
           Expanded(
@@ -84,8 +83,7 @@ class _OrderButtonState extends State<OrderButton> {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      child: _isLoading ? CircularProgressIndicator() : Text('Order Now'),
+    return TextButton(
       onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
           ? null
           : () async {
@@ -104,7 +102,14 @@ class _OrderButtonState extends State<OrderButton> {
               });
               widget.cart.clear();
             },
-      textColor: Theme.of(context).primaryColor,
+      child: _isLoading
+          ? const CircularProgressIndicator()
+          : Text(
+              'Order Now',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
     );
   }
 }

@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/auth.dart';
-import '../providers/cart.dart';
-import '../providers/product.dart';
-import '../screens/product_detail_screen.dart';
+import 'package:shop_app/providers/auth.dart';
+import 'package:shop_app/providers/cart.dart';
+import 'package:shop_app/providers/product.dart';
+import 'package:shop_app/screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
-  // final String id;
-  // final String imageUrl;
-  // final String title;
-
-  // ProductItem({
-  //   this.title,
-  //   this.imageUrl,
-  //   this.id,
-  // });
-
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(
@@ -31,39 +20,6 @@ class ProductItem extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: GridTile(
-        child: Container(
-          padding: const EdgeInsets.all(7.0),
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                blurRadius: 20.0,
-                spreadRadius: 5.0,
-                offset: Offset(10, 10),
-              )
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  ProductDetailScreen.routeName,
-                  arguments: product.id,
-                );
-              },
-              child: Hero(
-                tag: product.id!,
-                child: FadeInImage(
-                  placeholder:
-                      AssetImage('assets/images/product-placeholder.png'),
-                  image: NetworkImage(product.imageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-        ),
         footer: GridTileBar(
           title: Text(
             product.title,
@@ -86,7 +42,7 @@ class ProductItem extends StatelessWidget {
             ),
           ),
           trailing: IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
               cart.addItem(
@@ -94,11 +50,11 @@ class ProductItem extends StatelessWidget {
                 product.price,
                 product.title,
               );
-              Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Added item to cart!'),
-                  duration: Duration(seconds: 2),
+                  content: const Text('Added item to cart!'),
+                  duration: const Duration(seconds: 2),
                   action: SnackBarAction(
                     label: 'UNDO',
                     onPressed: () {
@@ -108,6 +64,39 @@ class ProductItem extends StatelessWidget {
                 ),
               );
             },
+          ),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(7.0),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.4),
+                blurRadius: 20.0,
+                spreadRadius: 5.0,
+                offset: const Offset(10, 10),
+              )
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  ProductDetailScreen.routeName,
+                  arguments: product.id,
+                );
+              },
+              child: Hero(
+                tag: product.id!,
+                child: FadeInImage(
+                  placeholder:
+                      const AssetImage('assets/images/product-placeholder.png'),
+                  image: NetworkImage(product.imageUrl),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
         ),
       ),

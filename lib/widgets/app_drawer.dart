@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../screens/order_screen.dart';
-import '../screens/user_products_screen.dart';
-import '../providers/auth.dart';
-import '../helpers/custom_route.dart';
+import 'package:shop_app/providers/auth.dart';
+import 'package:shop_app/screens/order_screen.dart';
+import 'package:shop_app/screens/user_products_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -13,43 +11,37 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text('Hello Shopper!'),
+            title: const Text('Hello Shopper!'),
             automaticallyImplyLeading: false,
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.shop),
-            title: Text('Shop'),
+            leading: const Icon(Icons.shop),
+            title: const Text('Shop'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed('/');
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.payment),
-            title: Text('Orders'),
-            onTap: () {
-              Navigator.of(context).pushReplacementNamed(OrderScreen.routeName);
-              // Navigator.of(context).pushReplacement(
-              //   CustomRoute(
-              //     builder: (ctx) => OrderScreen(),
-              //   ),
-              // );
-            },
+            leading: const Icon(Icons.payment),
+            title: const Text('Orders'),
+            onTap: () => Navigator.of(context)
+                .pushReplacementNamed(OrderScreen.routeName),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Manage Products'),
+            leading: const Icon(Icons.edit),
+            title: const Text('Manage Products'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(UserProductsScreen.routeName);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
             onTap: () {
               // Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName);
               Navigator.of(context).pop();
@@ -58,7 +50,7 @@ class AppDrawer extends StatelessWidget {
               Provider.of<Auth>(context, listen: false).logout();
             },
           ),
-          Divider(),
+          const Divider(),
         ],
       ),
     );
