@@ -44,7 +44,7 @@ class Orders with ChangeNotifier {
               (cp) => {
                 'id': cp.id,
                 'title': cp.title,
-                'quatity': cp.quantity,
+                'quantity': cp.quantity,
                 'price': cp.price,
               },
             )
@@ -88,7 +88,7 @@ class Orders with ChangeNotifier {
             return CartItem(
               id: item['id'] as String,
               price: item['price'] as double,
-              quantity: item['quantity'] as int,
+              quantity: item['quantity'] as int? ?? 1,
               title: item['title'] as String,
             );
           }).toList(),
