@@ -7,10 +7,10 @@ class CartItem {
   final double price;
 
   CartItem({
-    @required this.id,
-    @required this.price,
-    @required this.title,
-    @required this.quantity,
+    required this.id,
+    required this.price,
+    required this.title,
+    required this.quantity,
   });
 }
 
@@ -70,7 +70,7 @@ class Cart with ChangeNotifier {
   void removeSingleItem(String productId) {
     if (!_items.containsKey(productId)) {
       return;
-    } else if (_items[productId].quantity > 1) {
+    } else if (_items[productId]!.quantity > 1) {
       _items.update(
         productId,
         (existingItem) => CartItem(
@@ -80,8 +80,7 @@ class Cart with ChangeNotifier {
           quantity: existingItem.quantity - 1,
         ),
       );
-    }
-    else {
+    } else {
       _items.remove(productId);
     }
     notifyListeners();

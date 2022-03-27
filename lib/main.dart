@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
           value: Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          create: (_) => Products(null, null, []),
+          create: (_) => Products("", "", []),
           update: (ctx, auth, previousProducts) => Products(
-            auth.token,
-            auth.userId,
+            auth.token!,
+            auth.userId!,
             previousProducts == null ? [] : previousProducts.items,
           ),
         ),
@@ -38,10 +38,10 @@ class MyApp extends StatelessWidget {
           value: Cart(),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
-          create: (ctx) => Orders(null, null, []),
+          create: (ctx) => Orders("", "", []),
           update: (ctx, auth, previousOrder) => Orders(
-            auth.token,
-            auth.userId,
+            auth.token!,
+            auth.userId!,
             previousOrder == null ? [] : previousOrder.orders,
           ),
         ),

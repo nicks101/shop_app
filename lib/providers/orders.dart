@@ -12,10 +12,10 @@ class OrderItem {
   final DateTime datetime;
 
   OrderItem({
-    @required this.id,
-    @required this.datetime,
-    @required this.amount,
-    @required this.products,
+    required this.id,
+    required this.datetime,
+    required this.amount,
+    required this.products,
   });
 }
 

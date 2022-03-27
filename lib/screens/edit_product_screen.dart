@@ -1,6 +1,5 @@
-import 'package:provider/provider.dart';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
 import '../providers/products.dart';
@@ -47,7 +46,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context).settings.arguments as String;
+      final productId = ModalRoute.of(context)?.settings.arguments as String?;
       if (productId != null) {
         _editedProduct =
             Provider.of<Products>(context, listen: false).findById(productId);
@@ -88,18 +87,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   Future<void> _saveForm() async {
-    final _isValid = _form.currentState.validate();
+    final _isValid = _form.currentState!.validate();
     if (!_isValid) {
       return;
     }
-    _form.currentState.save();
+    _form.currentState!.save();
     setState(() {
       _isLoading = true;
     });
 
     if (_editedProduct.id != null) {
       await Provider.of<Products>(context, listen: false)
-          .updateProducts(_editedProduct.id, _editedProduct);
+          .updateProducts(_editedProduct.id!, _editedProduct);
     } else {
       try {
         await Provider.of<Products>(context, listen: false)
@@ -164,12 +163,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         FocusScope.of(context).requestFocus(_priceFocusNode);
                       },
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value == null || value.isEmpty) {
                           return 'Please enter a title';
                         }
                         return null;
                       },
                       onSaved: (value) {
+                        if (value == null) return;
                         _editedProduct = Product(
                           id: _editedProduct.id,
                           isFavorite: _editedProduct.isFavorite,
@@ -191,7 +191,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             .requestFocus(_descriptionFocusNode);
                       },
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value == null || value.isEmpty) {
                           return 'Please enter a price';
                         }
                         if (double.tryParse(value) == null ||
@@ -201,6 +201,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         return null;
                       },
                       onSaved: (value) {
+                        if (value == null) return;
                         _editedProduct = Product(
                           id: _editedProduct.id,
                           isFavorite: _editedProduct.isFavorite,
@@ -218,7 +219,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       maxLines: 3,
                       focusNode: _descriptionFocusNode,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value == null || value.isEmpty) {
                           return 'Please enter a description';
                         }
                         if (value.length < 10) {
@@ -227,6 +228,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         return null;
                       },
                       onSaved: (value) {
+                        if (value == null) return;
                         _editedProduct = Product(
                           id: _editedProduct.id,
                           isFavorite: _editedProduct.isFavorite,
@@ -272,7 +274,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               _saveForm();
                             },
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value == null || value.isEmpty) {
                                 return 'Please enter an image URL.';
                               }
                               if (!value.startsWith('http') &&
@@ -287,6 +289,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               return null;
                             },
                             onSaved: (value) {
+                              if (value == null) return;
                               _editedProduct = Product(
                                 id: _editedProduct.id,
                                 isFavorite: _editedProduct.isFavorite,

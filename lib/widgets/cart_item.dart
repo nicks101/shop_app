@@ -1,6 +1,5 @@
-import 'package:provider/provider.dart';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
 
@@ -12,11 +11,11 @@ class CartItem extends StatelessWidget {
   final String title;
 
   CartItem({
-    this.productId,
-    this.id,
-    this.title,
-    this.price,
-    this.quantity,
+    required this.productId,
+    required this.id,
+    required this.title,
+    required this.price,
+    required this.quantity,
   });
 
   @override

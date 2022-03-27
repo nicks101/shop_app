@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
-  final String id;
+  final String? id;
   final String imageUrl;
   final String title;
   final String description;
@@ -12,11 +12,11 @@ class Product with ChangeNotifier {
   bool isFavorite;
 
   Product({
-    @required this.id,
-    @required this.description,
-    @required this.imageUrl,
-    @required this.price,
-    @required this.title,
+    required this.id,
+    required this.description,
+    required this.imageUrl,
+    required this.price,
+    required this.title,
     this.isFavorite = false,
   });
 

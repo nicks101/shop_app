@@ -64,15 +64,11 @@ class Products with ChangeNotifier {
         filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
     var url =
         'https://flutter-shop-app-60a6a.firebaseio.com/products.json?auth=$authToken&$filterString';
-    // try {
     final response = await http.get(Uri.parse(url));
-    // print(json.decode(response.body));
+
+    if (response.body.isEmpty) return;
 
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
-
-    if (extractedData == null) {
-      return;
-    }
 
     url =
         'https://flutter-shop-app-60a6a.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
@@ -94,10 +90,6 @@ class Products with ChangeNotifier {
     });
     _items = _loadedProduct;
     notifyListeners();
-    // } catch (error) {
-    //   print(error);
-    //   throw error;
-    // }
   }
 
   Future<void> addProducts(Product product) async {
@@ -158,7 +150,7 @@ class Products with ChangeNotifier {
 
     final existingProductIndex =
         _items.indexWhere((product) => product.id == id);
-    var existingProduct = _items[existingProductIndex];
+    Product? existingProduct = _items[existingProductIndex];
 
     _items.removeAt(existingProductIndex);
     notifyListeners();
