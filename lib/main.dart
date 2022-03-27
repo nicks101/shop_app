@@ -1,20 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter/material.dart';
-
-import './screens/products_overview_screen.dart';
-import './screens/product_detail_screen.dart';
-import './screens/cart_screen.dart';
-import './screens/order_screen.dart';
-import './screens/user_products_screen.dart';
-import './screens/edit_product_screen.dart';
-import './screens/auth_screen.dart';
-import './screens/splash_screen.dart';
-import './providers/products.dart';
+import './helpers/custom_route.dart';
+import './providers/auth.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
-import './providers/auth.dart';
-import './helpers/custom_route.dart';
+import './providers/products.dart';
+import './screens/auth_screen.dart';
+import './screens/cart_screen.dart';
+import './screens/edit_product_screen.dart';
+import './screens/order_screen.dart';
+import './screens/product_detail_screen.dart';
+import './screens/products_overview_screen.dart';
+import './screens/splash_screen.dart';
+import './screens/user_products_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,8 +26,8 @@ class MyApp extends StatelessWidget {
           value: Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          initialBuilder: (ctx) => Products(null, null, []),
-          builder: (ctx, auth, previousProducts) => Products(
+          create: (_) => Products(null, null, []),
+          update: (ctx, auth, previousProducts) => Products(
             auth.token,
             auth.userId,
             previousProducts == null ? [] : previousProducts.items,
@@ -39,8 +38,8 @@ class MyApp extends StatelessWidget {
           value: Cart(),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
-          initialBuilder: (ctx) => Orders(null, null, []),
-          builder: (ctx, auth, previousOrder) => Orders(
+          create: (ctx) => Orders(null, null, []),
+          update: (ctx, auth, previousOrder) => Orders(
             auth.token,
             auth.userId,
             previousOrder == null ? [] : previousOrder.orders,
@@ -52,8 +51,6 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Shop App',
           theme: ThemeData(
-            primarySwatch: Colors.purple,
-            accentColor: Colors.deepOrangeAccent,
             fontFamily: 'Lato',
             pageTransitionsTheme: PageTransitionsTheme(
               builders: {
@@ -61,6 +58,8 @@ class MyApp extends StatelessWidget {
                 TargetPlatform.iOS: CustomPageTransitionBuilder(),
               },
             ),
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
+                .copyWith(secondary: Colors.deepOrangeAccent),
           ),
           home: auth.isAuth
               ? ProductsOverviewScreen()

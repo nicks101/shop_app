@@ -1,7 +1,7 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import './product.dart';
 import '../models/http_exception.dart';
@@ -60,53 +60,58 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
-    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
-    var url = 'https://flutter-shop-app-60a6a.firebaseio.com/products.json?auth=$authToken&$filterString';
-    try {
-      final response = await http.get(url);
-      // print(json.decode(response.body));
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    var url =
+        'https://flutter-shop-app-60a6a.firebaseio.com/products.json?auth=$authToken&$filterString';
+    // try {
+    final response = await http.get(Uri.parse(url));
+    // print(json.decode(response.body));
 
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
-      if (extractedData == null) {
-        return;
-      }
-
-      url = 'https://flutter-shop-app-60a6a.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
-      final favouriteResponse = await http.get(url);
-      final favouriteData = json.decode(favouriteResponse.body);
-
-      final List<Product> _loadedProduct = [];
-
-      extractedData.forEach((prodId, prodData) {
-        _loadedProduct.add(Product(
-          id: prodId,
-          price: prodData['price'],
-          description: prodData['description'],
-          imageUrl: prodData['imageUrl'],
-          title: prodData['title'],
-          isFavorite: favouriteData == null ? false : favouriteData[prodId] ?? false,
-        ));
-      });
-      _items = _loadedProduct;
-      notifyListeners();
-    } catch (error) {
-      print(error);
-      throw error;
+    if (extractedData == null) {
+      return;
     }
+
+    url =
+        'https://flutter-shop-app-60a6a.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
+    final favouriteResponse = await http.get(Uri.parse(url));
+    final favouriteData = json.decode(favouriteResponse.body);
+
+    final List<Product> _loadedProduct = [];
+
+    extractedData.forEach((prodId, prodData) {
+      _loadedProduct.add(Product(
+        id: prodId,
+        price: prodData['price'],
+        description: prodData['description'],
+        imageUrl: prodData['imageUrl'],
+        title: prodData['title'],
+        isFavorite:
+            favouriteData == null ? false : favouriteData[prodId] ?? false,
+      ));
+    });
+    _items = _loadedProduct;
+    notifyListeners();
+    // } catch (error) {
+    //   print(error);
+    //   throw error;
+    // }
   }
 
   Future<void> addProducts(Product product) async {
-    final url = 'https://flutter-shop-app-60a6a.firebaseio.com/products.json?auth=$authToken';
+    final url =
+        'https://flutter-shop-app-60a6a.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.post(
-        url,
+        Uri.parse(url),
         body: json.encode({
           'title': product.title,
           'price': product.price,
           'description': product.description,
           'imageUrl': product.imageUrl,
-          'creatorId' : userId,
+          'creatorId': userId,
         }),
       );
 
@@ -132,7 +137,7 @@ class Products with ChangeNotifier {
       final url =
           'https://flutter-shop-app-60a6a.firebaseio.com/products/$id.json?auth=$authToken';
 
-      await http.patch(url,
+      await http.patch(Uri.parse(url),
           body: json.encode({
             'title': newProduct.title,
             'price': newProduct.price,
@@ -158,7 +163,7 @@ class Products with ChangeNotifier {
     _items.removeAt(existingProductIndex);
     notifyListeners();
 
-    final response = await http.delete(url);
+    final response = await http.delete(Uri.parse(url));
     if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();

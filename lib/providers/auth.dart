@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +36,7 @@ class Auth with ChangeNotifier {
         'https://identitytoolkit.googleapis.com/v1/accounts:$urlSegment?key=AIzaSyDAT29OLEpPB0dqwch9hzt1SlXIuh25Vew';
     try {
       final response = await http.post(
-        url,
+        Uri.parse(url),
         body: json.encode(
           {
             'email': email,
@@ -85,14 +85,15 @@ class Auth with ChangeNotifier {
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    if(!prefs.containsKey('userData')) {
+    if (!prefs.containsKey('userData')) {
       return false;
     }
-    final extractedUserData = json.decode(prefs.getString('userData')) as Map<String, Object>;
+    final extractedUserData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
     final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
 
-    if(expiryDate.isBefore(DateTime.now())){
-       return false;
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
     }
 
     _token = extractedUserData['token'];
@@ -112,10 +113,10 @@ class Auth with ChangeNotifier {
       _authTimer = null;
     }
     notifyListeners();
-    
+
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('userData');
-    prefs.clear();            
+    prefs.clear();
   }
 
   void _autoLogout() {
