@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/app_drawer.dart';
-import '../widgets/products_grid.dart';
-import '../widgets/badge.dart';
-import '../providers/cart.dart';
 import './cart_screen.dart';
+import '../providers/cart.dart';
 import '../providers/products.dart';
+import '../widgets/app_drawer.dart';
+import '../widgets/badge.dart';
+import '../widgets/products_grid.dart';
 
 enum FilterOptions {
   ShowFavorites,
@@ -27,13 +27,15 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+      if (mounted)
         setState(() {
-          _isLoading = false;
+          _isLoading = true;
         });
+      Provider.of<Products>(context).fetchAndSetProducts().then((_) {
+        if (mounted)
+          setState(() {
+            _isLoading = false;
+          });
       });
     }
     _isInit = false;

@@ -1,7 +1,7 @@
-import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Product with ChangeNotifier {
   final String id;
@@ -35,7 +35,7 @@ class Product with ChangeNotifier {
 
     try {
       final response = await http.put(
-        url,
+        Uri.parse(url),
         body: json.encode(
           isFavorite,
         ),
